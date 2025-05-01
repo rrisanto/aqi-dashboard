@@ -23,4 +23,5 @@ def predict():
     return jsonify(df[['Datetime', 'PM2.5', 'Predicted_PM25']].to_dict(orient='records'))
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, host='0.0.0.0', port=8000)
+

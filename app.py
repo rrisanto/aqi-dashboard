@@ -25,22 +25,23 @@ scaler = joblib.load("model/scaler.pkl") if os.path.exists("model/scaler.pkl") e
 # Fitur input
 features = ['PM1', 'PM10', 'NO2', 'O3', 'TEMPERATURE', 'HUMIDITY', 'PRESSURE']
 
-# Route root (homepage)
+# Route root
 @app.route("/")
 def index():
     return "🎉 Flask is running! Model status: " + ("Loaded" if model else "Missing")
 
-# Endpoint prediksi
+# Route prediksi
 @app.route("/predict", methods=["POST"])
 def predict():
-    df = pd.read_csv("data/sample_input.csv")
-    X = df[features]
-    X_scaled = scaler.transform(X)
-    df["Predicted_PM25"] = model.predict(X_scaled)
-    return jsonify(df[["Datetime", "PM2.5", "Predicted_PM25"]].to_dict(orient="records"))
-except Exception as e:
-    return jsonify({"status": "error", "message": str(e)})
+    try:
+        df = pd.read_csv("data/sample_input.csv")
+        X = df[features]
+        X_scaled = scaler.transform(X)
+        df["Predicted_PM25"] = model.predict(X_scaled)
+        return jsonify(df[["Datetime", "PM2.5", "Predicted_PM25"]].to_dict(orient="records"))
+    except Exception as e:
+        return jsonify({"status": "error", "message": str(e)})
 
-# Menjalankan app
+# Jalankan Flask
 if __name__ == "__main__":
     app.run(debug=True, host="0.0.0.0", port=8000)

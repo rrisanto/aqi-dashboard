@@ -5,7 +5,15 @@ from sklearn.preprocessing import MinMaxScaler
 
 app = Flask(__name__)
 
-model = joblib.load("model/rf_model.pkl")
+import os
+
+model_path = "model/rf_model.pkl"
+if os.path.exists(model_path):
+    model = joblib.load(model_path)
+else:
+    model = None
+    print("⚠️ Model file not found. Please upload 'rf_model.pkl' to /model directory.")
+
 scaler = joblib.load("model/scaler.pkl")
 
 features = ['PM1', 'PM10', 'NO2', 'O3', 'TEMPERATURE', 'HUMIDITY', 'PRESSURE']
@@ -24,4 +32,9 @@ def predict():
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=8000)
+
+@app.route("/")
+def index():
+    return "🎉 Flask is running! Model status: " + ("Loaded" if model else "Missing")
+
 

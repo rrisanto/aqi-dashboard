@@ -5,6 +5,8 @@ import os
 import urllib.request
 
 app = Flask(__name__)
+if not os.path.exists("model"):
+    os.makedirs("model")
 
 # Unduh file model dari Dropbox jika belum ada
 def download_if_missing(url, path):

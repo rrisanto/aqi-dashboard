@@ -38,6 +38,8 @@ def predict():
     X_scaled = scaler.transform(X)
     df["Predicted_PM25"] = model.predict(X_scaled)
     return jsonify(df[["Datetime", "PM2.5", "Predicted_PM25"]].to_dict(orient="records"))
+except Exception as e:
+    return jsonify({"status": "error", "message": str(e)})
 
 # Menjalankan app
 if __name__ == "__main__":

@@ -5,6 +5,10 @@ from sklearn.preprocessing import MinMaxScaler
 
 app = Flask(__name__)
 
+@app.route("/")
+def index():
+    return "✅ Flask is running and model is ready!"
+
 import os
 
 model_path = "model/rf_model.pkl"

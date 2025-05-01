@@ -37,4 +37,13 @@ if __name__ == '__main__':
 def index():
     return "🎉 Flask is running! Model status: " + ("Loaded" if model else "Missing")
 
+import urllib.request
+
+def download_if_missing(url, path):
+    if not os.path.exists(path):
+        print(f"📥 Downloading {path}...")
+        urllib.request.urlretrieve(url, path)
+
+download_if_missing("https://www.dropbox.com/scl/fi/hdo9fefydl0wx1z8wxim0/rf_model.pkl?rlkey=w19vp9bwf0xo08jua3uypuqs6&st=3x3syesa&dl=1", "model/rf_model.pkl")
+download_if_missing("https://www.dropbox.com/scl/fi/osuagemety2c9kwoiohd5/scaler.pkl?rlkey=h3q3cdhmjp0v0l88uxk5qxnfr&st=ezdxszbq&dl=1", "model/scaler.pkl")
 

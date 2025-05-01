@@ -34,6 +34,27 @@ def index():
 @app.route("/predict", methods=["POST"])
 def predict():
     try:
+        print("📥 Membaca sample_input.csv...")
+        df = pd.read_csv("data/sample_input.csv")
+        print("✅ CSV terbaca:", df.shape)
+        print("📊 Kolom:", df.columns.tolist())
+
+        X = df[features]
+        print("📦 Subset fitur:", X.shape)
+
+        X_scaled = scaler.transform(X)
+        print("🔄 Data telah dinormalisasi")
+
+        df["Predicted_PM25"] = model.predict(X_scaled)
+        print("✅ Prediksi selesai")
+
+        return jsonify(df[["Datetime", "PM2.5", "Predicted_PM25"]].to_dict(orient="records"))
+    except Exception as e:
+        print("❌ ERROR:", e)
+        return jsonify({"status": "error", "message": str(e)})
+@app.route("/predict", methods=["POST"])
+def predict():
+    try:
         print("📥 Membaca file CSV...")
         df = pd.read_csv("data/sample_input.csv")
         print(f"✅ CSV dimuat, bentuk: {df.shape}")

@@ -34,13 +34,22 @@ def index():
 @app.route("/predict", methods=["POST"])
 def predict():
     try:
+        print("📥 Membaca file CSV...")
         df = pd.read_csv("data/sample_input.csv")
+        print(f"✅ CSV dimuat, bentuk: {df.shape}")
+        print(f"📊 Kolom: {df.columns.tolist()}")
+
         X = df[features]
         X_scaled = scaler.transform(X)
-        df["Predicted_PM25"] = model.predict(X_scaled)
+        predictions = model.predict(X_scaled)
+        df["Predicted_PM25"] = predictions
+
         return jsonify(df[["Datetime", "PM2.5", "Predicted_PM25"]].to_dict(orient="records"))
+
     except Exception as e:
+        print(f"❌ ERROR: {str(e)}")
         return jsonify({"status": "error", "message": str(e)})
+
 
 # Jalankan Flask
 if __name__ == "__main__":
